@@ -7,5 +7,6 @@ const express_1 = __importDefault(require("express"));
 const router_1 = __importDefault(require("./router"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use(express_1.default.text());
 app.use(router_1.default);
 exports.default = app;
