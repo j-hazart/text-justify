@@ -10,7 +10,6 @@ router.get("/", (req, res) => {
     res.send("Express server");
 });
 router.post("/api/justify", (req, res) => {
-    const justifyText = (0, formatTheText_1.default)(req.body);
-    res.send(justifyText);
+    res.send((0, formatTheText_1.default)(req.body));
 });
 exports.default = router;

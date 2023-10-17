@@ -8,8 +8,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.post("/api/justify", (req: Request, res: Response) => {
-  const justifyText: Array<string> = formatTheText(req.body);
-  res.send(justifyText);
+  res.send(formatTheText(req.body));
 });
 
 export default router;
