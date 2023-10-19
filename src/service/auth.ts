@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 
 
-
 dotenv.config();
 
 if(process.env.JWT_SECRET){
@@ -37,7 +36,11 @@ export function verifyToken(req: Request, res: Response, next: NextFunction){
             throw new Error("Authorization header has not the 'Bearer' type");
         }
 
-        req.payload = jwt.verify(token, jwtSecret);
+        if (!jwt.verify(token, jwtSecret)){
+          throw new Error("Token is not available");
+        }
+
+        req.token = token;
 
         next();
     } catch(err) {

@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users = [];
 let currentDate = new Date().getDate();
 function verifyRateLimit(req, res, next) {
-    const email = req.payload.email;
+    const token = req.token;
     const text = req.body;
     if (isDateChanged()) {
         currentDate = new Date().getDate();
         resetDailyLimits();
     }
-    if (!isUserRegistered(email)) {
-        addNewUser(email);
+    if (!isUserRegistered(token)) {
+        addNewUser(token);
     }
-    const currentUser = getCurrentUser(email);
+    const currentUser = getCurrentUser(token);
     if (currentUser) {
         if (currentUser.wordsLimit >= wordsInText(text)) {
             updateUserLimit(currentUser, text);
@@ -24,18 +24,18 @@ function verifyRateLimit(req, res, next) {
     }
 }
 ;
-function isUserRegistered(email) {
-    return users.map((user) => user.email).includes(email);
+function isUserRegistered(token) {
+    return users.map((user) => user.token).includes(token);
 }
-function addNewUser(email) {
-    const user = { email, wordsLimit: 80000 };
+function addNewUser(token) {
+    const user = { token, wordsLimit: 80000 };
     users.push(user);
 }
 function wordsInText(text) {
     return text.split(" ").length;
 }
-function getCurrentUser(email) {
-    return users.find((user) => user.email === email);
+function getCurrentUser(token) {
+    return users.find((user) => user.token === token);
 }
 function updateUserLimit(user, text) {
     const userIndex = users.indexOf(user);
