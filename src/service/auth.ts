@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
 
 dotenv.config();
 
@@ -25,4 +26,30 @@ function getToken(email: string) {
   }
 }
 
-export default getToken;
+function verifyToken(req: Request, res: Response, next: NextFunction){
+    try {
+        const authorizationHeader = req.get("Authorization");
+
+        if(authorizationHeader == null) {
+            throw new Error("Authorization header is missing");
+        }
+
+        const [type, token] = authorizationHeader.split(" ");
+
+        if (type !== "Bearer") {
+            throw new Error("Authorization header has not the 'Bearer' type");
+        }
+
+        req.payload = jwt.verify(token, process.env.JWT_SECRET);
+
+        next();
+    } catch(err) {
+        console.error(err);
+        res.sendStatus(401);
+    }
+}
+
+module.exports = {
+    getToken,
+    verifyToken,
+};

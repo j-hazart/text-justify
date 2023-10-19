@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import formatTheText from "./service/formatTheText";
-import getToken from "./service/auth";
+import {getToken, verifyToken} from "./service/auth";
 
 const router: Router = express.Router();
 
@@ -14,7 +14,7 @@ router.post("/api/justify", (req: Request, res: Response) => {
 
 router.post("/api/token", (req: Request, res: Response) => {
   const email: string | undefined = req.body.email;
-  
+
   if(!email){
     res.status(400).send("Bad Request - Email is missing");
     return;
