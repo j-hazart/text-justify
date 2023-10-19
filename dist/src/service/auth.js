@@ -34,7 +34,10 @@ function verifyToken(req, res, next) {
         if (type !== "Bearer") {
             throw new Error("Authorization header has not the 'Bearer' type");
         }
-        req.payload = jsonwebtoken_1.default.verify(token, jwtSecret);
+        if (!jsonwebtoken_1.default.verify(token, jwtSecret)) {
+            throw new Error("Token is not available");
+        }
+        req.token = token;
         next();
     }
     catch (err) {

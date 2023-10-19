@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 type User = {
-    email: string,
+    token: string,
     wordsLimit: number
 };
 
@@ -10,7 +10,7 @@ const users: User[] = [];
 let currentDate: number = new Date().getDate();
 
 function verifyRateLimit (req: Request, res: Response, next: NextFunction){
-    const email: string = req.payload.email;
+    const token: string = req.token;
     const text: string = req.body;
 
     if(isDateChanged()){
@@ -18,11 +18,11 @@ function verifyRateLimit (req: Request, res: Response, next: NextFunction){
         resetDailyLimits();
     }
 
-    if(!isUserRegistered(email)){
-        addNewUser(email);
+    if(!isUserRegistered(token)){
+        addNewUser(token);
     }
     
-    const currentUser = getCurrentUser(email)
+    const currentUser = getCurrentUser(token)
 
     if(currentUser){
         if(currentUser.wordsLimit >= wordsInText(text)){
@@ -34,12 +34,12 @@ function verifyRateLimit (req: Request, res: Response, next: NextFunction){
     }
 };
 
-function isUserRegistered(email: string): boolean{
-    return users.map((user: User) => user.email).includes(email);
+function isUserRegistered(token: string): boolean{
+    return users.map((user: User) => user.token).includes(token);
 }
 
-function addNewUser(email: string): void{
-    const user: User = {email, wordsLimit: 80000};
+function addNewUser(token: string): void{
+    const user: User = {token, wordsLimit: 80000};
     users.push(user);
 }
 
@@ -47,8 +47,8 @@ function wordsInText(text: string): number{
     return text.split(" ").length;
 }
 
-function getCurrentUser(email: string): User | undefined{
-    return users.find((user: User) => user.email === email);
+function getCurrentUser(token: string): User | undefined{
+    return users.find((user: User) => user.token === token);
 }
 
 function updateUserLimit(user: User, text: string): void{
