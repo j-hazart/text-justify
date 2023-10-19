@@ -2,31 +2,28 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 
+
+
 dotenv.config();
 
-function getToken(email: string) {
-  type JwtToken = string;
+if(process.env.JWT_SECRET){
+  var jwtSecret: string = process.env.JWT_SECRET;
+} else {
+  console.error("JWT_SECRET is not defined in your environment variables.");
+}
 
+export function getToken(email: string) {
   const payload: { email: string } = { email };
 
-  let jwtSecret: string | undefined;
-  
-  if (process.env.JWT_SECRET) {
-    jwtSecret = process.env.JWT_SECRET;
-  } else {
-    console.error("JWT_SECRET is not defined in your environment variables.");
-    return undefined;
-  }
-
   if (payload && jwtSecret) {
-    const token: JwtToken = jwt.sign(payload, jwtSecret);
+    const token: string = jwt.sign(payload, jwtSecret);
     return token;
   } else {
     return undefined;
   }
 }
 
-function verifyToken(req: Request, res: Response, next: NextFunction){
+export function verifyToken(req: Request, res: Response, next: NextFunction){
     try {
         const authorizationHeader = req.get("Authorization");
 
@@ -40,7 +37,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction){
             throw new Error("Authorization header has not the 'Bearer' type");
         }
 
-        req.payload = jwt.verify(token, process.env.JWT_SECRET);
+        req.payload = jwt.verify(token, jwtSecret);
 
         next();
     } catch(err) {
@@ -49,7 +46,3 @@ function verifyToken(req: Request, res: Response, next: NextFunction){
     }
 }
 
-module.exports = {
-    getToken,
-    verifyToken,
-};

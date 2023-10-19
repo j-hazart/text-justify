@@ -18,7 +18,7 @@ function formatTheText(text: string): string {
     }
     return line + "\n";
   });
-
+  
   return justifyText.join("");
 }
 

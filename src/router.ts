@@ -8,7 +8,7 @@ router.get("/", (req: Request, res: Response) => {
   res.send("Express server");
 });
 
-router.post("/api/justify", (req: Request, res: Response) => {
+router.post("/api/justify", verifyToken, (req: Request, res: Response) => {
   res.send(formatTheText(req.body));
 });
 
