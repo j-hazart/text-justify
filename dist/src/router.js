@@ -6,11 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const formatTheText_1 = __importDefault(require("./service/formatTheText"));
 const auth_1 = require("./service/auth");
+const verifyLimit_1 = __importDefault(require("./service/verifyLimit"));
 const router = express_1.default.Router();
 router.get("/", (req, res) => {
     res.send("Express server");
 });
-router.post("/api/justify", auth_1.verifyToken, (req, res) => {
+router.post("/api/justify", auth_1.verifyToken, verifyLimit_1.default, (req, res) => {
     res.send((0, formatTheText_1.default)(req.body));
 });
 router.post("/api/token", (req, res) => {
