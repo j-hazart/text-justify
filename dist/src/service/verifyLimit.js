@@ -1,9 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const users = [];
+let currentDate = new Date().getDate();
 function verifyRateLimit(req, res, next) {
     const email = req.payload.email;
     const text = req.body;
+    if (isDateChanged()) {
+        currentDate = new Date().getDate();
+        resetDailyLimits();
+    }
     if (!isUserRegistered(email)) {
         addNewUser(email);
     }
@@ -35,5 +40,14 @@ function getCurrentUser(email) {
 function updateUserLimit(user, text) {
     const userIndex = users.indexOf(user);
     users[userIndex].wordsLimit -= wordsInText(text);
+}
+function isDateChanged() {
+    const today = new Date().getDate();
+    return today !== currentDate;
+}
+function resetDailyLimits() {
+    users.forEach((user) => {
+        user.wordsLimit = 80000;
+    });
 }
 exports.default = verifyRateLimit;
