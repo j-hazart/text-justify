@@ -1,29 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function formatTheText(text) {
+    const caractersLimit = 80;
+    const paragraphs = text.split("\n");
+    const linesResizedParagraphs = [];
+    paragraphs.forEach((paragraph) => {
+        linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit));
+    });
+    const justifiedParagraphs = linesResizedParagraphs.map((linesResizedParagraph) => {
+        return justifyParagraph(linesResizedParagraph, caractersLimit).join('');
+    });
+    return justifiedParagraphs.join('');
+}
+function resizeLines(text, caractersLimit) {
     const lines = [];
-    let line = "";
+    let line = '';
     const words = text.split(" ");
-    words.forEach((word) => {
-        if (line.length + word.length > 80 || word.includes("\n")) {
+    words.forEach((word, index) => {
+        if (line.length + word.length > caractersLimit) {
             lines.push(line.trim());
             line = word + " ";
         }
         else {
             line += word + " ";
+            index === words.length - 1 && lines.push(line.trim());
         }
     });
-    const justifyText = lines.map((line) => {
-        if (line.length < 80) {
-            return justifyLine(line) + "\n";
+    return lines;
+}
+function justifyParagraph(paragraph, caractersLimit) {
+    return paragraph.map((line, index) => {
+        if (line.length < caractersLimit && index !== paragraph.length - 1) {
+            return justifyLine(line, caractersLimit) + "\n";
         }
         return line + "\n";
     });
-    return justifyText.join("");
 }
-function justifyLine(line) {
+function justifyLine(line, caractersLimit) {
     let justifiedLine = "";
-    const spacesToAdd = 80 - line.length;
+    const spacesToAdd = caractersLimit - line.length;
     const words = line.split(" ");
     const wordCount = words.length;
     const spacesPerWord = Math.ceil(spacesToAdd / (wordCount - 1));

@@ -1,31 +1,49 @@
 function formatTheText(text: string): string {
-  const lines: Array<string> = [];
-  let line: string = "";
-  const words: Array<string> = text.split(" ");
+  const caractersLimit: number = 80;
+  const paragraphs: string[] = text.split("\n");
+  const linesResizedParagraphs: string[][] = [];
 
-  words.forEach((word: string) => {
-    if (line.length + word.length > 80 || word.includes("\n")) {
-      lines.push(line.trim());
-      line = word + " ";
-    } else {
-      line += word + " ";
-    }
+  paragraphs.forEach((paragraph) => {
+    linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit))
   });
 
-  const justifyText: Array<String> = lines.map((line) => {
-    if (line.length < 80) {
-      return justifyLine(line) + "\n";
-    }
-    return line + "\n";
-  });
-  
-  return justifyText.join("");
+  const justifiedParagraphs: string[] = linesResizedParagraphs.map((linesResizedParagraph) => {
+    return justifyParagraph(linesResizedParagraph, caractersLimit).join('');
+  })
+
+  return justifiedParagraphs.join('');
 }
 
-function justifyLine(line: string): string {
+function resizeLines(text: string, caractersLimit: number): string[] {
+  const lines:string[] = [];
+    let line: string = '';
+    const words: string[] = text.split(" ");
+
+    words.forEach((word, index) => {
+      if (line.length + word.length > caractersLimit) {
+        lines.push(line.trim());
+        line = word + " ";
+      } else {
+        line += word + " ";
+        index === words.length - 1 && lines.push(line.trim());
+      }
+    })
+    return lines;
+}
+
+function justifyParagraph(paragraph: string[], caractersLimit: number): string[] {
+  return paragraph.map((line, index) => {
+    if (line.length < caractersLimit && index !== paragraph.length - 1) {
+      return justifyLine(line, caractersLimit) + "\n";
+    }
+    return line + "\n";
+  })
+}
+
+function justifyLine(line: string, caractersLimit: number): string {
   let justifiedLine: string = "";
-  const spacesToAdd: number = 80 - line.length;
-  const words: Array<string> = line.split(" ");
+  const spacesToAdd: number = caractersLimit - line.length;
+  const words: string[] = line.split(" ");
   const wordCount: number = words.length;
 
   const spacesPerWord: number  = Math.ceil(spacesToAdd / (wordCount - 1));
