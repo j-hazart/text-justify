@@ -5,7 +5,8 @@ function formatTheText(text) {
     const paragraphs = text.split("\n");
     const linesResizedParagraphs = [];
     paragraphs.forEach((paragraph) => {
-        linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit));
+        if (paragraph.length !== 0)
+            linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit));
     });
     const justifiedParagraphs = linesResizedParagraphs.map((linesResizedParagraph) => {
         return justifyParagraph(linesResizedParagraph, caractersLimit).join('');
