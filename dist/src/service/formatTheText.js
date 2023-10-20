@@ -1,5 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * The function `formatTheText` takes a string of text and formats it into paragraphs with a maximum of
+ * 80 characters per line, then justifies the paragraphs and returns the formatted text.
+ * @param {string} text - The `text` parameter is a string that represents the text that needs to be
+ * formatted.
+ * @returns The function `formatTheText` returns a string that contains the formatted and justified
+ * paragraphs of the input text.
+ */
 function formatTheText(text) {
     const caractersLimit = 80;
     const paragraphs = text.split("\n");
@@ -13,6 +21,16 @@ function formatTheText(text) {
     });
     return justifiedParagraphs.join('');
 }
+/**
+ * The function `resizeLines` takes a string of text and a character limit as input, and returns an
+ * array of strings where each string represents a line of text with a maximum character limit.
+ * @param {string} text - The `text` parameter is a string that represents the text that needs to be
+ * resized into lines.
+ * @param {number} caractersLimit - The `caractersLimit` parameter specifies the maximum number of
+ * characters allowed in each line of the text.
+ * @returns The function `resizeLines` returns an array of strings, which represents the lines of text
+ * after resizing.
+ */
 function resizeLines(text, caractersLimit) {
     const lines = [];
     let line = '';
@@ -29,6 +47,15 @@ function resizeLines(text, caractersLimit) {
     });
     return lines;
 }
+/**
+ * The `justifyParagraph` function takes in a paragraph as an array of strings and a character limit,
+ * and returns a new array of strings where each line is justified to the specified character limit.
+ * @param {string[]} paragraph - The `paragraph` parameter is an array of strings representing the
+ * lines of the paragraph that you want to justify.
+ * @param {number} caractersLimit - The `caractersLimit` parameter specifies the maximum number of
+ * characters allowed in each line of the paragraph.
+ * @returns The function `justifyParagraph` returns an array of strings.
+ */
 function justifyParagraph(paragraph, caractersLimit) {
     return paragraph.map((line, index) => {
         if (line.length < caractersLimit && index !== paragraph.length - 1) {
@@ -37,6 +64,15 @@ function justifyParagraph(paragraph, caractersLimit) {
         return line + "\n";
     });
 }
+/**
+ * The `justifyLine` function takes a line of text and a character limit, and returns the line with
+ * additional spaces added between words to justify it to the given limit.
+ * @param {string} line - The `line` parameter is a string that represents a line of text that needs to
+ * be justified.
+ * @param {number} caractersLimit - The `caractersLimit` parameter represents the maximum number of
+ * characters allowed in a line of text.
+ * @returns The function `justifyLine` returns a string that represents the justified line.
+ */
 function justifyLine(line, caractersLimit) {
     let justifiedLine = "";
     const spacesToAdd = caractersLimit - line.length;

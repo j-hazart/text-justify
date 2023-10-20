@@ -9,6 +9,19 @@ const users: User[] = [];
 
 let currentDate: number = new Date().getDate();
 
+/**
+ * The function verifies the rate limit for a user based on their token, checks if the current date has
+ * changed, registers new users if necessary, and updates the user's limit if they have not exceeded
+ * it.
+ * @param {Request} req - The `req` parameter represents the HTTP request object, which contains
+ * information about the incoming request such as headers, query parameters, and request body.
+ * @param {Response} res - The `res` parameter is the response object that is used to send a response
+ * back to the client. It contains methods and properties that allow you to control the response, such
+ * as setting the status code, headers, and sending the response body.
+ * @param {NextFunction} next - The `next` parameter is a function that is called to pass control to
+ * the next middleware function in the stack. It is typically used to move on to the next function in
+ * the request-response cycle.
+ */
 function verifyRateLimit (req: Request, res: Response, next: NextFunction){
     const token: string = req.token;
     const text: string = req.body;
