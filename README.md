@@ -43,7 +43,7 @@ Start the server
 
 ### POST email
 
-```http
+```cURL
   POST /api/token
 ```
 *Send an email to get a token to use text justification.*
@@ -57,7 +57,7 @@ __body(json):__
 
 ### POST text
 
-```http
+```cURL
   POST /api/justify
 ```
 *Send a text to justify it with maximum 80 caracters per line. Usage limited to 80 000 words per day and user.*
