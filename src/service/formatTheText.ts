@@ -4,7 +4,7 @@ function formatTheText(text: string): string {
   const linesResizedParagraphs: string[][] = [];
 
   paragraphs.forEach((paragraph) => {
-    linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit))
+    if(paragraph.length !== 0) linesResizedParagraphs.push(resizeLines(paragraph, caractersLimit))
   });
 
   const justifiedParagraphs: string[] = linesResizedParagraphs.map((linesResizedParagraph) => {
